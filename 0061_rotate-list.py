@@ -1,17 +1,25 @@
 # Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, val=0, next=None):
-#         self.val = val
-#         self.next = next
 
 # Find the tail of the linked list, and capture the size of it.
 # Keep a pointer to the head
 # Find the position of the new head by adding k to the size of the list.
 # Move up to the position in the list that refers the head,
 # Put a None in node.next and return the temp value holding next.
-from typing import Tuple
+from typing import Tuple, Optional
+
+
+class ListNode:
+    def __init__(self, val=0, next: "ListNode" = None):
+        self.val = val
+        self.next = next
+
+
 class Solution:
-    def find_tail(self, head: ListNode) -> Tuple[int, ListNode]:
+    """
+    Solution
+    """
+    @staticmethod
+    def __find_tail(head: ListNode) -> Tuple[int, ListNode]:
         next_: ListNode = head.next
         node: ListNode = head
         total: int = 1
@@ -22,32 +30,31 @@ class Solution:
 
         return total, node
 
-    def find_new_head(self, head: ListNode,
-                           pos: int) -> ListNode:
+    @staticmethod
+    def __find_new_head(head: ListNode, pos: int) -> ListNode:
         tail: ListNode = head
-        head: ListNode = head.next
+        head_: ListNode = head.next
 
         for _ in range(pos - 1):
-            tail = head
-            head = head.next
+            tail = head_
+            head = head_.next
 
         tail.next = None
         return head
 
-    def rotateRight(self,
-                    head: Optional[ListNode],
-                    k: int) -> Optional[ListNode]:
+    def rotate_right(self,
+                     head: Optional[ListNode], k: int
+                     ) -> Optional[ListNode]:
+        """Solution"""
         if not head or not head.next:
             return head
 
-        list_size, tail = self.find_tail(head)
+        list_size, tail = self.__find_tail(head)
 
         # Make it a circular list
         tail.next = head
 
-        new_head_index_reverse: int = (
-            - ((list_size + k) % list_size)
-        )
+        new_head_index_reverse: int = -((list_size + k) % list_size)
 
         new_head_index: int = list_size + new_head_index_reverse
 
@@ -55,9 +62,6 @@ class Solution:
             tail.next = None
             return head
 
-        new_head: ListNode = self.find_new_head(
-            head,
-            new_head_index
-        )
+        new_head: ListNode = self.__find_new_head(head, new_head_index)
 
         return new_head
